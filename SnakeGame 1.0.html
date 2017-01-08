@@ -94,11 +94,18 @@
 				ball= snake[i];
 				
 				if(i==snake.length-1){
-					ctx.fillStyle="lightblue";
+					ctx.fillStyle="brown";
 				}
-					var img= new Image();
+
+				else if(i%2==0){
+					ctx.fillStyle="orange";
+				}
+				else{
+					ctx.fillStyle="red";
+				}
+					/*var img= new Image();
 					img.src="snake_head.png";
-					ctx.drawImage(img,30,30,20,20,ball.x, ball.y, 19, 19);
+					ctx.drawImage(img,30,30,20,20,ball.x, ball.y, 19, 19);*/
 					
 				
 				if(ball.x+20 > width){   //touching right wall
