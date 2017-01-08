@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Snake Game</title>
+	<style type="text/css">
+		canvas{
+			background: #000;
+			margin: 0 auto;
+			position: absolute;
+			top:0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+
+		}
+
+		img{
+			display: none;
+		}
+	</style>
+
+</head>
+<body>
+	<canvas id="snakeBoard" >
+		
+	</canvas>
+	<img src="snake_tail.png" alt="" id="source">
+	<script type="text/javascript">
+		
+		
+		var canvas = document.getElementById('snakeBoard');	
+		var ctx =  canvas.getContext("2d");
+		var direction, snake, ball, food,foodBox;
+		var width=800;
+		var height=600;
+
+		canvas.width=width;
+		canvas.height=height;
+		
+		function init() {
+			
+			direction = "right";
+			var score=0;
+			 snake = [
+				{x:40, y:20},
+				{x:60, y:20},
+				{x:80, y:20}
+			];
+			setFood();
+		
+			
+		}
+		function setFood(){
+			foodBox={};
+					
+			foodBox.x=Math.floor(Math.random()*39);
+			foodBox.y=Math.floor(Math.random()*29);	
+		}
+
+		function add(){
+			var lastBall=snake[snake.length-1];
+			if(direction=="right")
+			 {
+			 snake.push({x:lastBall.x+20,y:lastBall.y});			
+			 }
+			 if(direction=="left")
+			 {
+			 snake.push({x:lastBall.x-20,y:lastBall.y});			
+			 }
+			 if(direction=="up")
+			 {
+			 snake.push({x:lastBall.x,y:lastBall.y-20});			
+			 }
+			 if(direction=="down")
+			 {
+			 snake.push({x:lastBall.x,y:lastBall.y+20});			
+			 }
+		}
+
+		function ani(){
+			ctx.clearRect(0,0,width,height);
+			ctx.fillStyle="red";
+			snake.shift();
+			add();		
+			var lastBall=snake[snake.length-1];
+			//if eats the food
+			if(lastBall.x==foodBox.x*20 && lastBall.y==foodBox.y*20){				
+				add();//increase snake
+				ctx.clearRect(foodBox.x*20,foodBox.y*20,19,19);
+				setFood();				
+			}
+			
+			for(var i=0; i< snake.length; i++){
+				ball= snake[i];
+				
+				if(i==snake.length-1){
+					ctx.fillStyle="lightblue";
+				}
+					var img= new Image();
+					img.src="snake_head.png";
+					ctx.drawImage(img,30,30,20,20,ball.x, ball.y, 19, 19);
+					
+				
+				if(ball.x+20 > width){   //touching right wall
+					init();					
+				}
+				if(ball.x < 0){           // touching left wall
+					init();
+				}
+				if(ball.y+20 >height){  // touching bottom wall 
+					init();
+				}
+				if(ball.y < 0){               // touching top wall 
+					init();
+				}
+				ctx.fillRect(ball.x,ball.y,19,19); 
+			}
+			ctx.fillStyle="lightgreen";	
+			ctx.fillRect(foodBox.x*20,foodBox.y*20,19,19);
+		}
+
+		document.addEventListener("keydown",function(evt){
+				if(evt.keyCode==37 && direction!="right"){
+					direction="left";
+				}
+				if(evt.keyCode==38 && direction!="down"){
+					direction="up";
+				}
+				if(evt.keyCode==39 && direction!="left"){
+					direction="right";
+				}
+				if(evt.keyCode==40 && direction!="up"){
+					direction="down";
+				}
+			});
+		init();
+		setInterval(ani,222);
+	</script>
+</body>
+</html>
